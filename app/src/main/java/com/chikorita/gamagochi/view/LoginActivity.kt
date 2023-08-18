@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -13,7 +15,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.location.LocationManagerCompat.getCurrentLocation
 import com.chikorita.gamagochi.R
+import com.chikorita.gamagochi.base.ApplicationClass
 import com.chikorita.gamagochi.base.BaseActivity
+import com.chikorita.gamagochi.data.login.KakaoSDKResponse
+import com.chikorita.gamagochi.data.login.LoginService
+import com.chikorita.gamagochi.data.login.LoginView
 import com.chikorita.gamagochi.databinding.ActivityLoginBinding
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
@@ -21,9 +27,10 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+import java.time.LocalDate
 
 
-class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate){
+class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate), LoginView{
 
     val LOCATION_PERMISSION_REQUEST_CODE = 100
     override fun initView(){
@@ -71,14 +78,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
                 TextMsg(this, "카카오계정으로 로그인 실패 : ${error}")
-                setLogin(false)
+                setLogin(false, null)
             } else if (token != null) {
                 //TODO: 최종적으로 카카오로그인 및 유저정보 가져온 결과
                 UserApiClient.instance.me { user, error ->
                     TextMsg(this, "카카오계정으로 로그인 성공 \n\n " +
                             "token: ${token.accessToken} \n\n " +
                             "me: ${user}")
-                    setLogin(true)
+                    setLogin(true, token.accessToken)
                 }
             }
         }
@@ -99,7 +106,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
                     UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
                 } else if (token != null) {
                     TextMsg(this, "카카오톡으로 로그인 성공 ${token.accessToken}")
-                    setLogin(true)
+                    setLogin(true, token.accessToken)
                 }
             }
         } else {
@@ -115,7 +122,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
             }
             else {
                 TextMsg(this, "로그아웃 성공. SDK에서 토큰 삭제됨")
-                setLogin(false)
+                setLogin(false, null)
             }
         }
     }
@@ -128,7 +135,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
             }
             else {
                 TextMsg(this, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
-                setLogin(false)
+                setLogin(false, null)
             }
         }
     }
@@ -137,11 +144,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         binding.tvHashKey.text = msg
     }
 
-    private fun setLogin(bool: Boolean) {
+    private fun setLogin(bool: Boolean, token: String?) {
         if (bool) {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-            finish()
+            // 서버 통신
+            LoginService(this).tryPostKakaoSDK(token!!)
+//            val intent = Intent(this, RegisterActivity::class.java)
+//            startActivity(intent)
+//            finish()
             overridePendingTransition(0, 0);
 
         }
@@ -174,6 +183,27 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
                 Toast.makeText(this, "위치 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onPostKakaoSDKSuccess(response: KakaoSDKResponse) {
+        Log.d("LoginActivity", "onPostKakaoSDKSuccess")
+        Log.d("Login", "$response")
+        // 유저 정보 저장
+        val editor = ApplicationClass.sSharedPreferences.edit()
+        editor.putInt(ApplicationClass.USER_ID, response.result.userId).apply()
+
+        if (response.result.newUser) { // 새로운 유저라면 유저 정보 세팅
+            startActivity(Intent(this, RegisterActivity::class.java))
+            finish()
+        } else { // 아니라면 메인 액티비티로
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
+    }
+
+    override fun onPostKakaoSDKFailure(message: String) {
+        Log.d("LoginActivity", "onPostKakaoSDKFailure")
     }
 
 
