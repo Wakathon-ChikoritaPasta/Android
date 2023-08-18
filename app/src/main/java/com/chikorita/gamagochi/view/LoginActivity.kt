@@ -1,19 +1,20 @@
 package com.chikorita.gamagochi.view
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.content.Intent
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
 import com.chikorita.gamagochi.databinding.ActivityLoginBinding
-
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate){
     override fun initView(){
@@ -24,6 +25,23 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         /** KakoSDK init */
         KakaoSdk.init(this, this.getString(R.string.kakao_app_key))
 
+
+        initListener()
+
+        val circleImageView = binding.circleImage
+        // 애니메이션 리소스 파일을 로드
+        val scaleAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.scale_up)
+
+        // 이미지뷰에 애니메이션 적용
+        circleImageView.startAnimation(scaleAnimation)
+
+        val titleImageView = binding.titleLogo
+
+        val rotateAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo)
+
+        titleImageView.startAnimation(rotateAnimation)
+    }
+    private fun initListener(){
         /** Click_listener */
         binding.btnStartKakaoLogin.setOnClickListener {
             kakaoLogin() //로그인
@@ -108,10 +126,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         binding.tvHashKey.text = msg
     }
 
-    private fun setLogin(bool: Boolean){
-        binding.btnStartKakaoLogin.visibility = if(bool) View.GONE else View.VISIBLE
-        binding.btnStartKakaoLogout.visibility = if(bool) View.VISIBLE else View.GONE
-        binding.btnStartKakaoUnlink.visibility = if(bool) View.VISIBLE else View.GONE
+    private fun setLogin(bool: Boolean) {
+        if (bool) {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0);
+
+        }
+//        binding.btnStartKakaoLogin.visibility = if(bool) View.GONE else View.VISIBLE
+//        binding.btnStartKakaoLogout.visibility = if(bool) View.VISIBLE else View.GONE
+//        binding.btnStartKakaoUnlink.visibility = if(bool) View.VISIBLE else View.GONE
+//
     }
 
 }

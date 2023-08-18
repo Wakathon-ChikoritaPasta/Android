@@ -12,6 +12,11 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import android.app.Activity
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
 import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
 import com.chikorita.gamagochi.databinding.ActivityMainBinding

@@ -25,8 +25,21 @@
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="@string/kakao_app_key"/>
 
         <activity
-            android:name=".view.SplashActivtiy"
+            android:name=".view.OnBoardingActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.Register2Activity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.RegisterActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.SplashActivity"
+            android:exported="false"
+            android:label="@string/title_activity_splash"
+            android:theme="@style/Theme.Gamagochi" />
         <activity
             android:name=".view.LoginActivity"
             android:exported="true">
