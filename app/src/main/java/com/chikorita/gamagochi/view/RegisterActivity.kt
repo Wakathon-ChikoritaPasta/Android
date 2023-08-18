@@ -24,11 +24,15 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(ActivityRegisterB
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.toString().isNotEmpty() ){
+
+                binding.countTv.text = count.toString() + "/8"
+
+                if (count > 0 && count < 8 ){
                     inputIsValid = true
                 }else{
                     inputIsValid = false
                 }
+
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -43,6 +47,9 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(ActivityRegisterB
 
             }
 
+        }
+        binding.deleteIv.setOnClickListener{
+            binding.inputEt.setText("")
         }
 
     }

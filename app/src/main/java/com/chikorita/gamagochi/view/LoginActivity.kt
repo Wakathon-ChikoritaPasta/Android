@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.animation.BounceInterpolator
 import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
 import com.chikorita.gamagochi.databinding.ActivityLoginBinding
@@ -31,15 +32,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         val circleImageView = binding.circleImage
         // 애니메이션 리소스 파일을 로드
         val scaleAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.scale_up)
-
         // 이미지뷰에 애니메이션 적용
         circleImageView.startAnimation(scaleAnimation)
 
         val titleImageView = binding.titleLogo
+        val scaleAnimation2: Animation = AnimationUtils.loadAnimation(this, R.anim.scale_up_down)
+        titleImageView.startAnimation(scaleAnimation2)
 
+        val logoImageView = binding.mudangLogo
         val rotateAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.rotate_logo)
+        logoImageView.startAnimation(rotateAnimation)
 
-        titleImageView.startAnimation(rotateAnimation)
     }
     private fun initListener(){
         /** Click_listener */
