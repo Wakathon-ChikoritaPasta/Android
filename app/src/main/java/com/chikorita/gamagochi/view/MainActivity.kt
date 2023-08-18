@@ -9,11 +9,13 @@ import android.os.Build
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
 import com.chikorita.gamagochi.databinding.ActivityMainBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -29,6 +31,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private var uLatitude : Double = 0.0
     private var uLongitude : Double = 0.0
 
+    private lateinit var behavior : BottomSheetBehavior<ConstraintLayout>
+
 
     override fun initView() {
 
@@ -36,6 +40,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         getLocationPermission()
         setCurrentLocation()
         addCustomMarker()
+        setBottomSheet()
     }
 
     override fun finish() {
@@ -95,5 +100,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             setCustomImageAnchor(0.5f, 1.0f)    // 마커 이미지 기준점
         }
         mapView.addPOIItem(marker)
+    }
+
+    private fun setBottomSheet() {
+        behavior = BottomSheetBehavior.from(binding.activityMainBottom.dialogMapBehaviorView)
+
+
+
     }
 }
