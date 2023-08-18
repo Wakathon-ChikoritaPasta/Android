@@ -49,7 +49,9 @@ class SchoolRankingFragment(id: Int): BaseBindingFragment<FragmentSchoolRankingB
                         })
 
                 }
-            }
+
+            getLevelRanking()
+        }
         }
     }
 }

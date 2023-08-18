@@ -34,10 +34,12 @@ class MainViewModel : ViewModel(){
     fun getLevelRanking() {
         viewModelScope.launch(Dispatchers.IO) {
             val response = levelRepository.getLevelRanking()
-            //Log.d("sns_add", response.body().toString())
+            Log.d("뭐냐",response.body().toString())
             if (response.isSuccessful && response.body() != null) {
                 viewModelScope.launch(Dispatchers.Main) {
-                    _user.value = (response.body()?.result as ArrayList<RankingList>)
+                    _user.value = (response.body()?.result?.rankingList as ArrayList<RankingList>)
+                    Log.d("뭘까",_user.value.toString())
+
                 }
             }
             else {
