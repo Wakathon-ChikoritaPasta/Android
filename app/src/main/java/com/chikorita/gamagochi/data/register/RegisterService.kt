@@ -24,4 +24,20 @@ class RegisterService(val view: RegisterView) {
             }
         })
     }
+    fun tryGetMajorList() {
+        registerRetrofitInterface.getMajorList().enqueue(object :
+            Callback<GetMajorListResult> {
+            override fun onResponse(call: Call<GetMajorListResult>, response: Response<GetMajorListResult>) {
+                when (response.code()) {
+                    200 -> view.onGetMajorListSuccess(response.body() as GetMajorListResult)
+                    else -> view.onGetMajorListFailure(response.toString())
+                }
+            }
+
+            override fun onFailure(call: Call<GetMajorListResult>, t: Throwable) {
+                Log.d("GetMajorList", "onFailure")
+                view.onGetMajorListFailure(t.message ?: "통신 오류")
+            }
+        })
+    }
 }

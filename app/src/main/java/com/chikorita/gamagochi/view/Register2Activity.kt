@@ -16,29 +16,49 @@ import com.chikorita.gamagochi.data.register.RegisterView
 import com.chikorita.gamagochi.data.register.SetUserInfoResponse
 import com.chikorita.gamagochi.databinding.ActivityRegister2Binding
 import com.chikorita.gamagochi.base.ApplicationClass.Companion.sSharedPreferences
+import com.chikorita.gamagochi.data.register.GetMajorListResponse
+import com.chikorita.gamagochi.data.register.GetMajorListResult
+
+enum class Major (val ko: String) {
+    SOFTWARE("소프트웨어학과"),
+    ARTIFICIAL_INTELLIGENCE("인공지능학과"),
+    COMPUTER_ENGINEERING("컴퓨터공학과"),
+    ELECTRONIC_ENGINEERING("전기공학과"),
+    INDUSTRY_ENGINEERING("산업공학과"),
+    PHYSICS("물리학과"),
+    BIOLOGY_ENGINEERING("생명공학과"),
+    CHEMISTRY("화학과"),
+    PSYCHOLOGY("심리학과"),
+    MATHEMATICS("수학과"),
+    HISTORY("역사학과"),
+    CHEMICAL_ENGINEERING("화학공학과"),
+    SOCIOLOGY("사회학과"),
+    LAW("법학과"),
+    MEDICAL_ENGINEERING("의료공학과"),
+    EDUCATION("교육학과");
+}
 
 
 class Register2Activity : BaseActivity<ActivityRegister2Binding>(ActivityRegister2Binding::inflate), RegisterView, AdapterView.OnItemSelectedListener{
     var inputIsValid = true
-    lateinit var items : Array<String>
+    var items : Array<String> = arrayOf()
+    var eItems : Array<String> = arrayOf()
     lateinit var spinner : Spinner
-
     lateinit var username : String
 
     override fun initView() {
-        initListener()
         response()
+        initListener()
         spinnerAdapter()
 
         username = intent.getStringExtra("username").toString()
-
     }
     private fun initListener(){
 
         val userId = sSharedPreferences.getInt(USER_ID, 1351345461)
         binding.nextBtn.setOnClickListener{
 
-            RegisterService(this).trySetUserInfo(userId, username, binding.inputEt.selectedItem.toString())
+            RegisterService(this).trySetUserInfo(userId, username, toEn(spinner.selectedItem.toString()))
 
             if(inputIsValid) {
                 val intent = Intent(this, OnBoardingActivity::class.java)
@@ -61,7 +81,24 @@ class Register2Activity : BaseActivity<ActivityRegister2Binding>(ActivityRegiste
     }
 
     private fun response(){
-        items = arrayOf("소프트웨어학과", "인공지능학과", "컴퓨터공학과", "스마트보안학과", "경영학과")
+        items = arrayOf(
+            "소프트웨어학과",
+            "인공지능학과",
+            "컴퓨터공학과",
+            "전기공학과",
+            "산업공학과",
+            "물리학과",
+            "생명공학과",
+            "화학과",
+            "심리학과",
+            "수학과",
+            "역사학과",
+            "화학공학과",
+            "사회학과",
+            "법학과",
+            "의료공학과",
+            "교육학과"
+        )
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -90,5 +127,25 @@ class Register2Activity : BaseActivity<ActivityRegister2Binding>(ActivityRegiste
 
     override fun onSetUserInfoFailure(message: String) {
         Log.d("SetUserInfo(failure)", message)
+    }
+
+    override fun onGetMajorListSuccess(response: GetMajorListResult) {
+        Log.d("GetMajorList", response.toString())
+
+        eItems = response.majorList.toTypedArray()
+        response()
+    }
+
+    override fun onGetMajorListFailure(message: String) {
+        Log.d("GetMajorList(failure)", message)
+    }
+
+    private fun toEn(text: String) : String {
+        for (b in Major.values()) {
+            if (b.ko == text) {
+                return b.name;
+            }
+        }
+        return "?";
     }
 }

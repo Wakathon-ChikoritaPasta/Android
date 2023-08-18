@@ -13,3 +13,11 @@ data class SetUserInfoResponse(
 data class SetUserInfoResult(
     val succeed: Boolean
 )
+
+data class GetMajorListResponse(
+    val result: GetMajorListResult
+)
+
+data class GetMajorListResult(
+    val majorList: ArrayList<String>
+)
