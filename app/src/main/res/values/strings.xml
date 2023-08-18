@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Gamagochi</string>
+
+    <!-- Kakao KEY설정[AndroidManifest.xml에도 설정]-->
+    <!-- Kakao-init에서 사용 -->
+    <string name="kakao_app_key">5ffdacdc602eef9758354428bbefce20</string>
+    <!-- AndroidManifest.xml에서 사용 -->
+    <string name="kakao_app_key2">kakao5ffdacdc602eef9758354428bbefce20</string>
 </resources>
