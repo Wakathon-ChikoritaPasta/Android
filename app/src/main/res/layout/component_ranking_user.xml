@@ -28,25 +28,27 @@
     android:layout_height="45dp"
     android:orientation="horizontal"
     android:gravity="center_vertical"
+    android:background="@drawable/border_rectangle"
     >
     
     <TextView
         android:id="@+id/rank_tv"
-        android:layout_width="20sp"
+        android:layout_width="24sp"
         android:layout_height="wrap_content"
         android:text="@{String.valueOf(rank) + '위'}"
         android:textColor="@color/black"
-        android:textSize="9sp"
+        android:textSize="12sp"
         android:layout_marginStart="8sp"
         android:gravity="end"
+        android:textStyle="bold"
         />
     <TextView
         android:id="@+id/id_tv"
-        android:layout_width="60dp"
+        android:layout_width="65dp"
         android:layout_height="wrap_content"
         android:text="@{nickName}"
         android:textColor="@color/black"
-        android:textSize="9sp"
+        android:textSize="13sp"
         android:layout_marginStart="12sp"
         android:gravity="end"
 
@@ -57,17 +59,17 @@
         android:layout_height="wrap_content"
         android:text="@{symbol}"
         android:textColor="@color/black"
-        android:textSize="9sp"
+        android:textSize="12sp"
         android:gravity="end"
         android:layout_weight="1"
         />
     <TextView
         android:id="@+id/exp_tv"
-        android:layout_width="50dp"
+        android:layout_width="53dp"
         android:layout_height="wrap_content"
         android:text="@{String.valueOf(exp) + `Ex`}"
         android:textColor="@color/black"
-        android:textSize="9sp"
+        android:textSize="12sp"
         android:layout_marginHorizontal="7dp"
         android:gravity="end"
         />

@@ -9,5 +9,8 @@ class LevelRepository {
 
     suspend fun getLevelRanking() = mainClient.getLevelRanking()
 
+    suspend fun getMajorAll() = mainClient.getMajorAll()
+
+
 
 }

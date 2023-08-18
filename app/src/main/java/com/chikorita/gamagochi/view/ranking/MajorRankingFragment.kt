@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SchoolRankingFragment(fragmentId: Int): BaseBindingFragment<FragmentSchoolRankingBinding>(R.layout.fragment_school_ranking) {
+class MajorRankingFragment(fragmentId: Int): BaseBindingFragment<FragmentSchoolRankingBinding>(R.layout.fragment_school_ranking) {
 
     val viewModel: MainViewModel by viewModels()
     val fragmentId = fragmentId
@@ -33,35 +33,14 @@ class SchoolRankingFragment(fragmentId: Int): BaseBindingFragment<FragmentSchool
 
         CoroutineScope(Dispatchers.IO).launch {
             setDataView()
+            viewModel.getMajorAll()
+
         }
     }
 
     private suspend fun setDataView() {
         withContext(Dispatchers.Main) {
         with(viewModel){
-            if(fragmentId == 0) {
-                user.observe(viewLifecycleOwner) {
-
-
-                    val userAdapter =
-                        activity?.let { it1 -> SchoolRankingRVAdapter(it, it1) }
-                    binding.exampleRecyclerView.apply {
-                        adapter = userAdapter
-                        layoutManager =
-                            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                    }
-                    userAdapter?.setOnItemClickListener(object :
-                        SchoolRankingRVAdapter.OnItemClickListener {
-                        override fun onClick(position: Int) {
-                        }
-                    })
-
-                }
-                getLevelRanking()
-
-            }else {
-
-
                 major.observe(viewLifecycleOwner) {
 
 
@@ -79,11 +58,7 @@ class SchoolRankingFragment(fragmentId: Int): BaseBindingFragment<FragmentSchool
                         }
                     })
 
-                }
-                getMajorAll()
-
-            }
-        }
+                } }
         }
     }
 }

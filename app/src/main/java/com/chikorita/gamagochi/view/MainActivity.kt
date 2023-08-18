@@ -60,6 +60,9 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
     private var serviceIntent: Intent? = null
     private lateinit var handler: Handler
 
+    private var isLocationUpdateEnabled = false // 버튼 클릭 상태 변수
+
+
 
     override fun initView() {
         //binding.setVariable(BR.viewModel,viewModel)
@@ -85,20 +88,6 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         setRankerBackground()
         initClickListener()
     }
-    private fun startLocationUpdates() {
-        handler = Handler(Looper.getMainLooper())
-        handler.postDelayed(locationUpdateRunnable, 60000) // 10초마다 실행
-    }
-
-    private val locationUpdateRunnable = object : Runnable {
-        override fun run() {
-            sendLocationToServer()
-
-            // 다음 위치 정보 전송 작업을 예약
-            handler.postDelayed(this, 10000) // 10초마다 실행
-        }
-    }
-
     private fun sendLocationToServer() {
         val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         try {
@@ -109,8 +98,11 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
             // 실제 서버 통신은 여기에 구현
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
-                    // 서버로 위치 정보를 전송하는 코드를 구현
-                    // sendLocationInfoToServer(latitude, longitude)
+                    sendInfoToServer()
+                    getLocationPermission()
+                    var missions : List<Long> = listOf(123L, 456L, 789L, 101112L)
+
+                    viewModel.postLocation(latitude, longitude, missions)
                 }
             }
 
@@ -121,12 +113,6 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         } catch (e: Exception) {
             Log.e("LOCATION_ERROR", e.toString())
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // 핸들러에 예약된 작업 제거
-        handler.removeCallbacks(locationUpdateRunnable)
     }
 
     private fun initClickListener(){
@@ -148,9 +134,34 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         }
 
         binding.activityMainFeedBtn.setOnClickListener {
-            startLocationUpdates()
+            if (isLocationUpdateEnabled) {
+                // 버튼을 눌렀을 때 위치 정보 업데이트가 활성화되어 있으면 비활성화
+                stopLocationUpdates()
+                binding.activityMainFeedBtn.text = "밥을 주는 중이에요"
+            } else {
+                // 버튼을 눌렀을 때 위치 정보 업데이트가 비활성화되어 있으면 활성화
+                startLocationUpdates()
+                binding.activityMainFeedBtn.text = "무당이에게 밥을 줘요"
+            }
+            isLocationUpdateEnabled = !isLocationUpdateEnabled
         }
 
+    }
+
+    private fun startLocationUpdates() {
+        handler = Handler(Looper.getMainLooper())
+        handler.post(locationUpdateRunnable)
+    }
+
+    private fun stopLocationUpdates() {
+        handler.removeCallbacks(locationUpdateRunnable)
+    }
+
+    private val locationUpdateRunnable = object : Runnable {
+        override fun run() {
+            sendLocationToServer()
+            handler.postDelayed(this, 60000) // 1분마다 실행
+        }
     }
 
     @SuppressLint("ResourceAsColor")
@@ -286,7 +297,9 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         Thread(Runnable {
 
             getLocationPermission()
+            var missions : List<Long> = listOf(123L, 456L, 789L, 101112L)
 
+            viewModel.postLocation(uLatitude, uLongitude, missions)
 
         }).start()
     }
@@ -298,5 +311,10 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
 
     override fun onGetMissionFailure(message: String) {
         Log.d("MainActivity", "onGetMissionFailure")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopLocationUpdates()
     }
 }

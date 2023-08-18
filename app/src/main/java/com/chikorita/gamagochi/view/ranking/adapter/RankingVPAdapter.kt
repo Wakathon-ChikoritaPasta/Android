@@ -3,6 +3,7 @@ package com.chikorita.gamagochi.view.ranking.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.chikorita.gamagochi.view.ranking.MajorRankingFragment
 import com.chikorita.gamagochi.view.ranking.SchoolRankingFragment
 
 class RankingVPAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
@@ -12,7 +13,7 @@ class RankingVPAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapte
     override fun createFragment(position: Int): Fragment {
         return when(position) {
             0 -> SchoolRankingFragment(0)
-            else -> SchoolRankingFragment(1)
+            else -> MajorRankingFragment(1)
         }
     }
 }

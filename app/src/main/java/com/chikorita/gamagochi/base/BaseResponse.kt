@@ -9,6 +9,4 @@ open class BaseResponse(
     @SerializedName("isSuccess") val isSuccess: Boolean = false,
     @SerializedName("code") val code: Int = 0,
     @SerializedName("message") val message: String? = null,
-    @SerializedName("result") open val result: String? = null
-
 )

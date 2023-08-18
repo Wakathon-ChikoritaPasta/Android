@@ -3,7 +3,7 @@ package com.chikorita.gamagochi.model
 data class LadybugLocationRequest (
     val latitude: Double,
     val longitude: Double,
-    val missionIdList: List<Int>
+    val missionIdList: List<Long>
     )
 
 data class SuccessMissionResponse(
