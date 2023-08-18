@@ -18,13 +18,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
+import com.chikorita.gamagochi.base.BaseBindingActivity
 import com.chikorita.gamagochi.data.MapData
 import com.chikorita.gamagochi.databinding.ActivityMainBinding
 import com.chikorita.gamagochi.model.MajorRanker
 import com.chikorita.gamagochi.model.SchoolRanker
 import com.chikorita.gamagochi.view.ranking.RankingActivity
+import com.chikorita.gamagochi.viewModel.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -32,7 +35,8 @@ import net.daum.mf.map.api.MapView
 
 
 //MainActivity.kt
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
+class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_main){
+    private val viewModel: MainViewModel by viewModels()
 
     lateinit var mapView: MapView
     private lateinit var mapViewContainer : ViewGroup
@@ -51,6 +55,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
 
     override fun initView() {
+        //binding.setVariable(BR.viewModel,viewModel)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         // 위치 권한 허용
         getLocationPermission()

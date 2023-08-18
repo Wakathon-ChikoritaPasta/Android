@@ -22,8 +22,7 @@ abstract class BaseBindingActivity<T: ViewDataBinding>(@LayoutRes private val la
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-       // binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        setContentView(binding.root)
+       binding = DataBindingUtil.setContentView(this,layoutId)
 
         initView()
     }

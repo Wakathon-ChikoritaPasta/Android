@@ -2,8 +2,8 @@
 <layout>
     <data>
         <variable
-            name="view"
-            type="com.chikorita.gamagochi.view.MainActivity" />
+            name="viewModel"
+            type="com.chikorita.gamagochi.viewModel.MainViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -254,26 +254,26 @@
         <include
             android:id="@+id/rank_user0"
             layout="@layout/component_ranking_user"
-            app:rank="@{view.SchoolRankerArray[0].rank}"
-            app:nickName="@{view.SchoolRankerArray[0].nickName}"
-            app:symbol="@{view.SchoolRankerArray[0].symbol}"
-            app:exp="@{view.SchoolRankerArray[0].exp}"
+            app:rank="@{viewModel.SchoolRankerArray[0].rank}"
+            app:nickName="@{viewModel.SchoolRankerArray[0].nickName}"
+            app:symbol="@{viewModel.SchoolRankerArray[0].symbol}"
+            app:exp="@{viewModel.SchoolRankerArray[0].exp}"
             />
         <include
             android:id="@+id/rank_user1"
             layout="@layout/component_ranking_user"
-            app:rank="@{view.SchoolRankerArray[1].rank}"
-            app:nickName="@{view.SchoolRankerArray[1].nickName}"
-            app:symbol="@{view.SchoolRankerArray[1].symbol}"
-            app:exp="@{view.SchoolRankerArray[1].exp}"
+            app:rank="@{viewModel.SchoolRankerArray[1].rank}"
+            app:nickName="@{viewModel.SchoolRankerArray[1].nickName}"
+            app:symbol="@{viewModel.SchoolRankerArray[1].symbol}"
+            app:exp="@{viewModel.SchoolRankerArray[1].exp}"
             />
         <include
             android:id="@+id/rank_user2"
             layout="@layout/component_ranking_user"
-            app:rank="@{view.SchoolRankerArray[2].rank}"
-            app:nickName="@{view.SchoolRankerArray[2].nickName}"
-            app:symbol="@{view.SchoolRankerArray[2].symbol}"
-            app:exp="@{view.SchoolRankerArray[2].exp}"
+            app:rank="@{viewModel.SchoolRankerArray[2].rank}"
+            app:nickName="@{viewModel.SchoolRankerArray[2].nickName}"
+            app:symbol="@{viewModel.SchoolRankerArray[2].symbol}"
+            app:exp="@{viewModel.SchoolRankerArray[2].exp}"
             />
 
         <LinearLayout
@@ -307,23 +307,23 @@
         <include
             android:id="@+id/rank_major0"
             layout="@layout/component_ranking_user"
-            app:rank="@{view.MajorRankerArray[0].rank}"
-            app:nickName="@{view.MajorRankerArray[0].major}"
-            app:exp="@{view.MajorRankerArray[0].exp}"
+            app:rank="@{viewModel.MajorRankerArray[0].rank}"
+            app:nickName="@{viewModel.MajorRankerArray[0].major}"
+            app:exp="@{viewModel.MajorRankerArray[0].exp}"
             />
         <include
             android:id="@+id/rank_major1"
             layout="@layout/component_ranking_user"
-            app:rank="@{view.MajorRankerArray[1].rank}"
-            app:nickName="@{view.MajorRankerArray[1].major}"
-            app:exp="@{view.MajorRankerArray[1].exp}"
+            app:rank="@{viewModel.MajorRankerArray[1].rank}"
+            app:nickName="@{viewModel.MajorRankerArray[1].major}"
+            app:exp="@{viewModel.MajorRankerArray[1].exp}"
             />
         <include
             android:id="@+id/rank_major2"
             layout="@layout/component_ranking_user"
-            app:rank="@{view.MajorRankerArray[2].rank}"
-            app:nickName="@{view.MajorRankerArray[2].major}"
-            app:exp="@{view.MajorRankerArray[2].exp}"
+            app:rank="@{viewModel.MajorRankerArray[2].rank}"
+            app:nickName="@{viewModel.MajorRankerArray[2].major}"
+            app:exp="@{viewModel.MajorRankerArray[2].exp}"
             />
 
     </LinearLayout>
