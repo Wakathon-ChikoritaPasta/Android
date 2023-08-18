@@ -144,6 +144,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         if (bool) {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+            finish()
             overridePendingTransition(0, 0);
 
         }

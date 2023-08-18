@@ -16,9 +16,9 @@ class OnBoardingActivity : BaseActivity<ActivityOnBoardingBinding>(
     private fun initListener(){
 
         binding.nextBtn.setOnClickListener{
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
 
         }
 
