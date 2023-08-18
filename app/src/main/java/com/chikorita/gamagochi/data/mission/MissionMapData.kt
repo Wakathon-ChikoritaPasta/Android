@@ -10,7 +10,7 @@ data class MissionMapResult(
     val missionList: ArrayList<MissionMapData>
 )
 data class MissionMapData(
-    var missionId: Int,
+    var missionId: Long,
     var missionName: String? = null, // 미션 이름
     var latitude: Double, // 위도
     var longitude: Double // 경도

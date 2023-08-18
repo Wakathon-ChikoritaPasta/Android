@@ -22,6 +22,9 @@ import com.chikorita.gamagochi.base.BaseBindingActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.chikorita.gamagochi.adapter.SchoolRankingRVAdapter
+import com.chikorita.gamagochi.base.ApplicationClass
 import com.chikorita.gamagochi.data.mission.MissionMapData
 import com.chikorita.gamagochi.data.mission.MissionMapResponse
 import com.chikorita.gamagochi.data.mission.MissionService
@@ -30,7 +33,9 @@ import com.chikorita.gamagochi.databinding.ActivityMainBinding
 import com.chikorita.gamagochi.view.ranking.RankingActivity
 import com.chikorita.gamagochi.viewModel.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.daum.mf.map.api.MapPOIItem
@@ -68,6 +73,9 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         //binding.setVariable(BR.viewModel,viewModel)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+//        CoroutineScope(Dispatchers.Default).launch {
+//            setDataView()
+//        }
 
         // 위치 권한 허용
         getLocationPermission()
@@ -87,6 +95,16 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
 
         setRankerBackground()
         initClickListener()
+
+        viewModel.mission.observe(this,{
+            ApplicationClass.missions = ApplicationClass.missions.map { missionId ->
+                if (it.any { it == missionId }) {
+                    0
+                } else {
+                    missionId
+                }
+            }
+        })
     }
     private fun sendLocationToServer() {
         val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -95,16 +113,16 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
             val latitude = userNowLocation.latitude
             val longitude = userNowLocation.longitude
 
-            // 실제 서버 통신은 여기에 구현
-            lifecycleScope.launch {
-                withContext(Dispatchers.IO) {
-                    sendInfoToServer()
-                    getLocationPermission()
-                    var missions : List<Long> = listOf(123L, 456L, 789L, 101112L)
+            Log.d("Location_error","4")
 
-                    viewModel.postLocation(latitude, longitude, missions)
-                }
+
+            // 실제 서버 통신은 여기에 구현
+            GlobalScope.launch {
+                    Log.d("Location_error","5")
+                    viewModel.postLocation(latitude, longitude, ApplicationClass.missions)
+                    Log.d("Location_error","6")
             }
+            Log.d("Location_error","7")
 
             Log.d("LOCATION_UPDATE", "Latitude: $latitude, Longitude: $longitude")
         } catch (e: SecurityException) {
@@ -112,6 +130,11 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
             Toast.makeText(this, "위치 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             Log.e("LOCATION_ERROR", e.toString())
+        }
+    }
+    private fun missionCheck(){
+        with(binding.activityMainBottom){
+
         }
     }
 
@@ -137,11 +160,11 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
             if (isLocationUpdateEnabled) {
                 // 버튼을 눌렀을 때 위치 정보 업데이트가 활성화되어 있으면 비활성화
                 stopLocationUpdates()
-                binding.activityMainFeedBtn.text = "밥을 주는 중이에요"
+                binding.activityMainFeedBtn.text = "무당이 밥 먹이기"
             } else {
                 // 버튼을 눌렀을 때 위치 정보 업데이트가 비활성화되어 있으면 활성화
                 startLocationUpdates()
-                binding.activityMainFeedBtn.text = "무당이에게 밥을 줘요"
+                binding.activityMainFeedBtn.text = "무당이는 밥 먹는 중"
             }
             isLocationUpdateEnabled = !isLocationUpdateEnabled
         }
@@ -149,6 +172,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
     }
 
     private fun startLocationUpdates() {
+        Log.d("Location_error","1")
         handler = Handler(Looper.getMainLooper())
         handler.post(locationUpdateRunnable)
     }
@@ -159,7 +183,11 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
 
     private val locationUpdateRunnable = object : Runnable {
         override fun run() {
+            Log.d("Location_error","2")
+
             sendLocationToServer()
+            Log.d("Location_error","3")
+
             handler.postDelayed(this, 60000) // 1분마다 실행
         }
     }
@@ -291,21 +319,39 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
 
     }
 
+    private suspend fun setDataView() {
+        withContext(Dispatchers.Main) {
+            with(viewModel){
+                val bottomDialog = binding.activityMainBottom
+
+                ladybug.observe(this@MainActivity) {
+
+                    bottomDialog.majorTv.text = it.majorType
+                    bottomDialog.symbolTv.text = it.symbol
+                }
+
+                getLadybugDetail()
+            }
+        }
+    }
+
     private fun sendInfoToServer() {
         // 서버 통신을 별도의 쓰레드에서 처리
 
         Thread(Runnable {
 
             getLocationPermission()
-            var missions : List<Long> = listOf(123L, 456L, 789L, 101112L)
 
-            viewModel.postLocation(uLatitude, uLongitude, missions)
+            //viewModel.postLocation(uLatitude, uLongitude, ApplicationClass.missions)
 
         }).start()
     }
     override fun onGetMissionSuccess(response: MissionMapResponse) {
         Log.d("MainActivity", "onGetMissionSuccess")
-        missionMapData = response.result.missionList
+
+        ApplicationClass.missions = response.result.missionList.map { it.missionId }
+
+            missionMapData = response.result.missionList
         setMissionMark(missionMapData)
     }
 

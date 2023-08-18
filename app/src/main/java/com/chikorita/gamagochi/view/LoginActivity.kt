@@ -196,7 +196,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
         } else { // 아니라면 메인 액티비티로
-            startActivity(Intent(this, RegisterActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
