@@ -1,11 +1,13 @@
-package com.chikorita.gamagochi
+package com.chikorita.gamagochi.view
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import com.chikorita.gamagochi.databinding.ActivityMainBinding
+import com.chikorita.gamagochi.R
+import com.chikorita.gamagochi.base.BaseActivity
+import com.chikorita.gamagochi.databinding.ActivityLoginBinding
+
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
@@ -13,16 +15,8 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 
-//MainActivity.kt
-class MainActivity : AppCompatActivity() {
-    private var _binding: ActivityMainBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
+class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate){
+    override fun initView(){
         /** HashKey확인 */
         val keyHash = Utility.getKeyHash(this)
         TextMsg(this, "HashKey: ${keyHash}")
@@ -119,4 +113,5 @@ class MainActivity : AppCompatActivity() {
         binding.btnStartKakaoLogout.visibility = if(bool) View.VISIBLE else View.GONE
         binding.btnStartKakaoUnlink.visibility = if(bool) View.VISIBLE else View.GONE
     }
+
 }
