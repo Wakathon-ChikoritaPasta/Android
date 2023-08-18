@@ -1,6 +1,7 @@
 package com.chikorita.gamagochi.view
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -28,7 +29,8 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(ActivityRegisterB
                 binding.countTv.text = count.toString() + "/8"
 
                 inputIsValid = count in 1..8
-
+                // 버튼 활성화 여부 체크
+                checkActivateState()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -36,7 +38,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(ActivityRegisterB
         })
 
         binding.nextBtn.setOnClickListener{
-            if(inputIsValid) {
+            if (inputIsValid) {
                 val intent = Intent(this, Register2Activity::class.java)
                 startActivity(intent)
                 finish()
@@ -47,5 +49,21 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(ActivityRegisterB
             binding.inputEt.setText("")
         }
 
+    }
+
+    private fun checkActivateState() {
+        if (inputIsValid) {
+            changeButtonState(true)
+        } else changeButtonState(false)
+    }
+
+    private fun changeButtonState(status: Boolean) {
+        val btn = binding.nextBtn
+        val btnColor = if (status) R.color.primary_default else R.color.primary_light
+
+        // 버튼 상태 변경
+        btn.isClickable = status
+        btn.isEnabled = status
+        btn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, btnColor))
     }
 }

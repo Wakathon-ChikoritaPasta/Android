@@ -1,6 +1,7 @@
 package com.chikorita.gamagochi.view
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -14,7 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
-import com.chikorita.gamagochi.data.MapData
+import com.chikorita.gamagochi.data.MissionMapData
 import com.chikorita.gamagochi.databinding.ActivityMainBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import net.daum.mf.map.api.MapPOIItem
@@ -28,8 +29,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     lateinit var mapView: MapView
     private lateinit var mapViewContainer : ViewGroup
 
-    private var mapData = ArrayList<MapData>()
-    private var markerArr = ArrayList<MapPOIItem>()
+    private var missionMapData = ArrayList<MissionMapData>()
 
 
     private var uLatitude : Double = 0.0
@@ -81,11 +81,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             uLongitude = userNowLocation.longitude
         } catch (e : NullPointerException) {
             Log.e("LOCATION_ERROR", e.toString())
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                ActivityCompat.finishAffinity(this)
-            } else {
-                ActivityCompat.finishAffinity(this)
-            }
+            ActivityCompat.finishAffinity(this)
 
             finish()
         }
@@ -125,21 +121,32 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun addDummyMapData() {
-        mapData.apply {
-            add(MapData("정상에 서본 자", 37.4502726, 127.1297295))
-            add(MapData("법을 잘 아는 자", 37.450191, 127.1297285))
-            add(MapData("코딩의 신", 37.4502626, 127.1297291))
+        missionMapData.apply {
+            add(MissionMapData("제2학생생활관", 37.4563, 127.13457))
+            add(MissionMapData("법과대학", 37.44925, 127.1275))
+            add(MissionMapData("AI 공학관", 37.45515, 127.1336))
+            add(MissionMapData("가천관", 37.45035, 127.1298))
+            add(MissionMapData("전기차 충전소", 37.452, 127.1305))
+            add(MissionMapData("교육대학원", 37.4519, 127.1318))
+            add(MissionMapData("AI 공학관", 37.45515, 127.1336))
+            add(MissionMapData("글로벌센터", 37.4518, 127.1272))
         }
+//        missionMapData.apply {
+//            add(MissionMapData("정상에 서본 자", 37.4502726, 127.1297295))
+//            add(MissionMapData("법을 잘 아는 자", 37.450191, 127.1297285))
+//            add(MissionMapData("코딩의 신", 37.4502626, 127.1297291))
+//        }
 
-        Log.e("MapData", mapData.toString())
+        Log.e("MapData", missionMapData.toString())
 
-        for (data in mapData) {
+        for (data in missionMapData) {
             val marker = MapPOIItem()
             marker.apply {
                 itemName = data.name
                 mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
-                markerType = MapPOIItem.MarkerType.BluePin
+//                markerType = MapPOIItem.MarkerType.BluePin
                 selectedMarkerType = MapPOIItem.MarkerType.RedPin
+                userObject = "https://blog.kakaocdn.net/dn/mVAhb/btq6vToLTIw/Kv9wktJNgsmJOYKnqNd7kk/img.png"
             }
             mapView.addPOIItem(marker)
         }
@@ -147,7 +154,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun setBottomSheet() {
         behavior = BottomSheetBehavior.from(binding.activityMainBottom.dialogMapBehaviorView)
-
 
     }
 }

@@ -1,10 +1,13 @@
 package com.chikorita.gamagochi.view
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.content.ContextCompat
+import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
 import com.chikorita.gamagochi.databinding.ActivityRegister2Binding
 
@@ -48,9 +51,21 @@ class Register2Activity : BaseActivity<ActivityRegister2Binding>(ActivityRegiste
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         //spinner.text(items[p2]);
+        changeButtonState(true)
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
         //spinner.setText(items[0]);
+        changeButtonState(false)
+    }
+
+    private fun changeButtonState(status: Boolean) {
+        val btn = binding.nextBtn
+        val btnColor = if (status) R.color.primary_default else R.color.primary_light
+
+        // 버튼 상태 변경
+        btn.isClickable = status
+        btn.isEnabled = status
+        btn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, btnColor))
     }
 }
