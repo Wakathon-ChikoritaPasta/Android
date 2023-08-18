@@ -24,6 +24,7 @@ import com.chikorita.gamagochi.data.MapData
 import com.chikorita.gamagochi.databinding.ActivityMainBinding
 import com.chikorita.gamagochi.model.MajorRanker
 import com.chikorita.gamagochi.model.SchoolRanker
+import com.chikorita.gamagochi.view.ranking.RankingActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -47,8 +48,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     lateinit var SchoolRankerArray : ArrayList<SchoolRanker>
     lateinit var MajorRankerArray : ArrayList<MajorRanker>
-
-    val bottomDialog = binding.activityMainBottom
 
 
     override fun initView() {
@@ -74,7 +73,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun initClickListener(){
-        val intent = Intent(this,RankingActivity::class.java)
+        val bottomDialog = binding.activityMainBottom
+
+        val intent = Intent(this, RankingActivity::class.java)
 
         bottomDialog.schoolRankingBtn.setOnClickListener {
 
@@ -82,6 +83,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun setRankerBackground(){
+        val bottomDialog = binding.activityMainBottom
 
 
         // 1등일 때
