@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-android:orientation="vertical"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-tools:context=".view.MainActivity">
-
-<RelativeLayout
-    android:id="@+id/activity_main_kakao_map_view"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.MainActivity">
 
-<include
-    android:id="@+id/activity_main_bottom"
-    layout="@layout/dialog_map_bottom"/>
+    <RelativeLayout
+        android:id="@+id/activity_main_kakao_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    
+    <TextView
+        android:id="@+id/activity_main_feed_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="무당이 밥 먹이기"
+        android:layout_gravity="bottom"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/round_border_layout"/>
+
+    <include
+        android:id="@+id/activity_main_bottom"
+        layout="@layout/dialog_map_bottom"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
