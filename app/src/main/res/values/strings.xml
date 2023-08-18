@@ -12,4 +12,5 @@
     <string name="next">다음</string>
     <string name="nickName">닉네임</string>
     <string name="major">학과</string>
+    <string name="input_nickname_tint">닉네임을 입력하세요</string>
 </resources>
