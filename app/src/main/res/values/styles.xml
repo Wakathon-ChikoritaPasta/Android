@@ -15,5 +15,12 @@
     <style name="tabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
+    <style name="ProgressBarNoPaddingGray" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:padding">0dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:progressDrawable">@color/primary_light</item> <!-- 테두리 제거 -->
+        <item name="android:progressBackgroundTint">@color/primary_light</item>
+        <item name="android:progressTint">@color/primary_normal</item>
     </style>
 </resources>

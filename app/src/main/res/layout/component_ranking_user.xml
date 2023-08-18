@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="rank"
+            type="int" />
+        <variable
+            name="nickName"
+            type="String" />
+        <variable
+            name="symbol"
+            type="String" />
+        <variable
+            name="exp"
+            type="long" />
+
+    </data>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    >
+    
+    <TextView
+        android:id="@+id/rank_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{rank + '위'}"
+        android:textColor="@color/black"
+        android:textSize="9sp"
+        />
+    <TextView
+        android:id="@+id/id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{id}"
+        android:textColor="@color/black"
+        android:textSize="9sp"
+        />
+    <TextView
+        android:id="@+id/symbol_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{symbol}"
+        android:textColor="@color/black"
+        android:textSize="9sp"
+        />
+    <TextView
+        android:id="@+id/exp_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{exp + `Ex`}"
+        android:textColor="@color/black"
+        android:textSize="9sp"
+        />
+
+</LinearLayout>
+
+</layout>
