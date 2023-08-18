@@ -22,6 +22,8 @@ import com.chikorita.gamagochi.base.BaseBindingActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.chikorita.gamagochi.adapter.SchoolRankingRVAdapter
 import com.chikorita.gamagochi.data.mission.MissionMapData
 import com.chikorita.gamagochi.data.mission.MissionMapResponse
 import com.chikorita.gamagochi.data.mission.MissionService
@@ -30,6 +32,7 @@ import com.chikorita.gamagochi.databinding.ActivityMainBinding
 import com.chikorita.gamagochi.view.ranking.RankingActivity
 import com.chikorita.gamagochi.viewModel.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -65,6 +68,9 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         //binding.setVariable(BR.viewModel,viewModel)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+        CoroutineScope(Dispatchers.IO).launch {
+            setDataView()
+        }
 
         // 위치 권한 허용
         getLocationPermission()
@@ -85,6 +91,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         setRankerBackground()
         initClickListener()
     }
+
     private fun startLocationUpdates() {
         handler = Handler(Looper.getMainLooper())
         handler.postDelayed(locationUpdateRunnable, 60000) // 10초마다 실행
@@ -278,6 +285,22 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
     private fun setBottomSheet() {
         behavior = BottomSheetBehavior.from(binding.activityMainBottom.dialogMapBehaviorView)
 
+    }
+
+    private suspend fun setDataView() {
+        withContext(Dispatchers.Main) {
+            with(viewModel){
+                val bottomDialog = binding.activityMainBottom
+
+                ladybug.observe(this@MainActivity) {
+
+                    bottomDialog.majorTv.text = it.majorType
+                    bottomDialog.symbolTv.text = it.symbol
+                }
+
+                getLadybugDetail()
+            }
+        }
     }
 
     private fun sendInfoToServer() {

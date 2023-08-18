@@ -31,9 +31,9 @@ data class MajorRank(
 )
 
 data class SchoolRank(
-    val experience: Int = 0,
-    val ladybugType : String = "EGG",
-    val nickname : String = "string",
-    val rank : Int = 0
+    val experience: Int = 0, // 경험치
+    val ladybugType : String = "EGG", // 레벨
+    val nickname : String = "string", // 닉네임
+    val rank : Int = 0 // 순위
 )
 
