@@ -48,6 +48,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         setBottomSheet()
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun finish() {
         binding.activityMainKakaoMapView.removeView(mapView)
         super.finish()

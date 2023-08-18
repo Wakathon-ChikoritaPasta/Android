@@ -40,10 +40,10 @@ abstract class BaseActivity<B : ViewBinding>(private val inflate: (LayoutInflate
         setContentView(binding.root)
 
         initView()
-        val window = window
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+//        val window = window
+//        window.setFlags(
+//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     abstract fun initView()

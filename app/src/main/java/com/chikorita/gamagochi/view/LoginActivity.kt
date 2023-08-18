@@ -1,11 +1,17 @@
 package com.chikorita.gamagochi.view
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.BounceInterpolator
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat.getCurrentLocation
 import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
 import com.chikorita.gamagochi.databinding.ActivityLoginBinding
@@ -18,7 +24,12 @@ import com.kakao.sdk.user.UserApiClient
 
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate){
+
+    val LOCATION_PERMISSION_REQUEST_CODE = 100
     override fun initView(){
+        // 위치 권한 요청
+        permission()
+
         /** HashKey확인 */
         val keyHash = Utility.getKeyHash(this)
         TextMsg(this, "HashKey: ${keyHash}")
@@ -141,5 +152,31 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 //        binding.btnStartKakaoUnlink.visibility = if(bool) View.VISIBLE else View.GONE
 //
     }
+
+    private fun permission() {
+        val locationPermission = Manifest.permission.ACCESS_FINE_LOCATION
+        if (ContextCompat.checkSelfPermission(this, locationPermission) != PackageManager.PERMISSION_GRANTED) {
+            // 권한이 없는 경우 권한 요청
+            ActivityCompat.requestPermissions(this, arrayOf(locationPermission), LOCATION_PERMISSION_REQUEST_CODE)
+        } else {
+            // 이미 권한이 있는 경우에 대한 처리
+            // 예: 위치 정보 가져오기
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한이 승인된 경우에 대한 처리
+                // 예: 위치 정보 가져오기
+            } else {
+                // 권한이 거부된 경우에 대한 처리
+                // 예: 권한 거부 메시지 표시
+                Toast.makeText(this, "위치 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
 }

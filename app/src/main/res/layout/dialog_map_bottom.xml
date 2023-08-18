@@ -5,7 +5,7 @@
     android:id="@+id/dialog_map_behavior_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:behavior_peekHeight="35dp"
+    app:behavior_peekHeight="50dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     android:background="@drawable/img_background">
 
@@ -30,12 +30,14 @@
     <LinearLayout
         android:id="@+id/dialog_map_container_layout"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="10dp"
         android:orientation="vertical"
+        android:layout_marginTop="180dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/border_round_top">
 
         <TextView
