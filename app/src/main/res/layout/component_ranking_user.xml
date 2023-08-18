@@ -13,6 +13,13 @@
         <variable
             name="exp"
             type="long" />
+        <variable
+            name="item"
+            type="com.chikorita.gamagochi.model.SchoolRanker"/>
+
+        <variable
+            name="viewModel"
+            type="com.chikorita.gamagochi.viewModel.MainViewModel" />
 
     </data>
 
