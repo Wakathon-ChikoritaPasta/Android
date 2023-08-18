@@ -1,39 +1,41 @@
 package com.chikorita.gamagochi.view
 
 import android.Manifest
-import android.app.AlertDialog
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
-import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.app.Activity
-import android.bluetooth.BluetoothClass.Device.Major
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.View
-import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.chikorita.gamagochi.R
-import com.chikorita.gamagochi.base.BaseActivity
-import com.chikorita.gamagochi.data.MissionMapData
 import com.chikorita.gamagochi.base.BaseBindingActivity
+import com.chikorita.gamagochi.data.MissionMapData
 import com.chikorita.gamagochi.databinding.ActivityMainBinding
-import com.chikorita.gamagochi.model.MajorRanker
-import com.chikorita.gamagochi.model.SchoolRanker
 import com.chikorita.gamagochi.view.ranking.RankingActivity
 import com.chikorita.gamagochi.viewModel.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 
 //MainActivity.kt
 class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_main){
@@ -50,8 +52,9 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
 
     private lateinit var behavior : BottomSheetBehavior<ConstraintLayout>
 
-    lateinit var SchoolRankerArray : ArrayList<SchoolRanker>
-    lateinit var MajorRankerArray : ArrayList<MajorRanker>
+
+    private var serviceIntent: Intent? = null
+    private lateinit var handler: Handler
 
 
     override fun initView() {
@@ -74,10 +77,51 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         // 위치 더미 데이터
         addDummyMapData()
 
-        initSchoolRanker()
-        initMajorRanker()
         setRankerBackground()
         initClickListener()
+    }
+    private fun startLocationUpdates() {
+        handler = Handler(Looper.getMainLooper())
+        handler.postDelayed(locationUpdateRunnable, 60000) // 10초마다 실행
+    }
+
+    private val locationUpdateRunnable = object : Runnable {
+        override fun run() {
+            sendLocationToServer()
+
+            // 다음 위치 정보 전송 작업을 예약
+            handler.postDelayed(this, 10000) // 10초마다 실행
+        }
+    }
+
+    private fun sendLocationToServer() {
+        val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        try {
+            val userNowLocation: Location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)!!
+            val latitude = userNowLocation.latitude
+            val longitude = userNowLocation.longitude
+
+            // 실제 서버 통신은 여기에 구현
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    // 서버로 위치 정보를 전송하는 코드를 구현
+                    // sendLocationInfoToServer(latitude, longitude)
+                }
+            }
+
+            Log.d("LOCATION_UPDATE", "Latitude: $latitude, Longitude: $longitude")
+        } catch (e: SecurityException) {
+            Log.e("LOCATION_ERROR", e.toString())
+            Toast.makeText(this, "위치 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Log.e("LOCATION_ERROR", e.toString())
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // 핸들러에 예약된 작업 제거
+        handler.removeCallbacks(locationUpdateRunnable)
     }
 
     private fun initClickListener(){
@@ -98,10 +142,14 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
             startActivity(intent)
         }
 
+        binding.activityMainFeedBtn.setOnClickListener {
+            startLocationUpdates()
+        }
+
     }
 
     @SuppressLint("ResourceAsColor")
-    private fun setRankerBackground(){
+    private fun setRankerBackground() {
         val bottomDialog = binding.activityMainBottom
 
         with(viewModel) {
@@ -110,7 +158,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
                 bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.border_rectangle)
                 bottomDialog.rankUser2.root.setBackgroundResource(R.drawable.border_rectangle)
 
-            } else if(SchoolRankerArray[2].nickName == "로건") {
+            } else if (SchoolRankerArray[2].nickName == "로건") {
                 bottomDialog.rankUser0.root.setBackgroundResource(R.drawable.border_rectangle)
                 bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.border_rectangle)
                 bottomDialog.rankUser2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
@@ -126,7 +174,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
                 bottomDialog.rankMajor1.root.setBackgroundResource(R.drawable.border_rectangle)
                 bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.border_rectangle)
 
-            } else if(MajorRankerArray[2].major == "소프트웨어") {
+            } else if (MajorRankerArray[2].major == "소프트웨어") {
                 bottomDialog.rankMajor0.root.setBackgroundResource(R.drawable.border_rectangle)
                 bottomDialog.rankMajor1.root.setBackgroundResource(R.drawable.border_rectangle)
                 bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
@@ -137,21 +185,6 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
             }
         }
 
-    }
-
-    private fun initSchoolRanker() {
-        SchoolRankerArray = arrayListOf(
-            SchoolRanker(16, "로건", "무당신", 3400),
-            SchoolRanker(17, "마라", "무당짱", 2300),
-            SchoolRanker(18, "코코아", "무당이", 1700)
-        )
-    }
-    private fun initMajorRanker() {
-        MajorRankerArray = arrayListOf(
-            MajorRanker(1, "소프트웨어학과", 450000),
-            MajorRanker(2, "인공지능학과", 390000),
-            MajorRanker(3, "컴퓨터공학과", 380000)
-        )
     }
 
 
@@ -255,5 +288,16 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
     private fun setBottomSheet() {
         behavior = BottomSheetBehavior.from(binding.activityMainBottom.dialogMapBehaviorView)
 
+    }
+
+    private fun sendInfoToServer(){
+        // 서버 통신을 별도의 쓰레드에서 처리
+
+        Thread(Runnable {
+
+            getLocationPermission()
+
+
+        }).start()
     }
 }

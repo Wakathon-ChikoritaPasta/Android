@@ -76,5 +76,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
 
+    implementation('com.google.android.gms:play-services-location:18.0.0') // 저는 18.0.0 버전입니다.
+
+
 
 }

@@ -13,4 +13,6 @@
     <string name="nickName">닉네임</string>
     <string name="major">학과</string>
     <string name="input_nickname_tint">닉네임을 입력하세요</string>
+    <string name="input_id_tint">닉네임을 입력하세요</string>
+
 </resources>
