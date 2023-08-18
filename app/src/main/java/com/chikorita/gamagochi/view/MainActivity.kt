@@ -1,30 +1,26 @@
 package com.chikorita.gamagochi.view
 
 import android.Manifest
-import android.app.AlertDialog
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
-import android.os.Build
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.app.Activity
-import android.bluetooth.BluetoothClass.Device.Major
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import com.chikorita.gamagochi.R
-import com.chikorita.gamagochi.base.BaseActivity
-import com.chikorita.gamagochi.data.MissionMapData
+import com.chikorita.gamagochi.data.mission.MissionMapData
 import com.chikorita.gamagochi.base.BaseBindingActivity
+import com.chikorita.gamagochi.data.mission.MissionMapResponse
+import com.chikorita.gamagochi.data.mission.MissionService
+import com.chikorita.gamagochi.data.mission.MissionView
 import com.chikorita.gamagochi.databinding.ActivityMainBinding
 import com.chikorita.gamagochi.model.MajorRanker
 import com.chikorita.gamagochi.model.SchoolRanker
@@ -36,7 +32,7 @@ import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
 //MainActivity.kt
-class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_main){
+class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_main), MissionView {
     private val viewModel: MainViewModel by viewModels()
 
     lateinit var mapView: MapView
@@ -72,7 +68,8 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         setBottomSheet()
 
         // 위치 더미 데이터
-        addDummyMapData()
+        getMissionMap()
+//        addDummyMapData()
 
         initSchoolRanker()
         initMajorRanker()
@@ -196,6 +193,11 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         mapView.setZoomLevel(1, true)
     }
 
+    private fun getMissionMap() {
+        // 서버 통신
+        MissionService(this).tryGetMissionMap()
+    }
+
     private fun setCurrentLocation() {
         val uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude, uLongitude)
         mapView.setMapCenterPoint(uNowPosition, true)
@@ -208,7 +210,6 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         val marker = MapPOIItem()
         marker.apply {
             itemName = "현재 위치"   // 마커 이름
-//            mapPoint = MapPoint.mapPointWithGeoCoord(uLatitude, uLongitude) // 37.450191, 127.1297289
             mapPoint = MapPoint.mapPointWithGeoCoord(uLatitude, uLongitude)   // 좌표
             markerType = MapPOIItem.MarkerType.CustomImage          // 마커 모양 (커스텀)
             customImageResourceId = R.drawable.ic_custom_marker               // 커스텀 마커 이미지
@@ -220,33 +221,14 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         mapView.addPOIItem(marker)
     }
 
-    private fun addDummyMapData() {
-        missionMapData.apply {
-            add(MissionMapData("제2학생생활관", 37.4563, 127.13457))
-            add(MissionMapData("법과대학", 37.44925, 127.1275))
-            add(MissionMapData("AI 공학관", 37.45515, 127.1336))
-            add(MissionMapData("가천관", 37.45035, 127.1298))
-            add(MissionMapData("전기차 충전소", 37.452, 127.1305))
-            add(MissionMapData("교육대학원", 37.4519, 127.1318))
-            add(MissionMapData("AI 공학관", 37.45515, 127.1336))
-            add(MissionMapData("글로벌센터", 37.4518, 127.1272))
-        }
-//        missionMapData.apply {
-//            add(MissionMapData("정상에 서본 자", 37.4502726, 127.1297295))
-//            add(MissionMapData("법을 잘 아는 자", 37.450191, 127.1297285))
-//            add(MissionMapData("코딩의 신", 37.4502626, 127.1297291))
-//        }
-
-        Log.e("MapData", missionMapData.toString())
-
-        for (data in missionMapData) {
+    private fun setMissionMark(dataList: ArrayList<MissionMapData>) {
+        for (data in dataList) {
             val marker = MapPOIItem()
             marker.apply {
-                itemName = data.name
+                itemName = data.missionName
                 mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
 //                markerType = MapPOIItem.MarkerType.BluePin
                 selectedMarkerType = MapPOIItem.MarkerType.RedPin
-                userObject = "https://blog.kakaocdn.net/dn/mVAhb/btq6vToLTIw/Kv9wktJNgsmJOYKnqNd7kk/img.png"
             }
             mapView.addPOIItem(marker)
         }
@@ -255,5 +237,15 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
     private fun setBottomSheet() {
         behavior = BottomSheetBehavior.from(binding.activityMainBottom.dialogMapBehaviorView)
 
+    }
+
+    override fun onGetMissionSuccess(response: MissionMapResponse) {
+        Log.d("MainActivity", "onGetMissionSuccess")
+        missionMapData = response.result.missionList
+        setMissionMark(missionMapData)
+    }
+
+    override fun onGetMissionFailure(message: String) {
+        Log.d("MainActivity", "onGetMissionFailure")
     }
 }
