@@ -6,4 +6,10 @@
     <string name="kakao_app_key">5ffdacdc602eef9758354428bbefce20</string>
     <!-- AndroidManifest.xml에서 사용 -->
     <string name="kakao_app_key2">kakao5ffdacdc602eef9758354428bbefce20</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="onBoarding_1">가마고치에 오신 것을\n환영합니다!</string>
+    <string name="onBoarding_2">귀여운 가천대 무당이를 키워보세요!</string>
+    <string name="next">다음</string>
+    <string name="nickName">닉네임</string>
+    <string name="major">학과</string>
 </resources>

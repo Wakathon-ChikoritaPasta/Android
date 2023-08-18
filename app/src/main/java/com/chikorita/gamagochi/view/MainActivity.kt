@@ -1,6 +1,7 @@
 package com.chikorita.gamagochi.view
 
 import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -18,7 +19,6 @@ import com.kakao.sdk.user.UserApiClient
 //MainActivity.kt
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
     override fun initView() {
-        TODO("Not yet implemented")
     }
 
 }
