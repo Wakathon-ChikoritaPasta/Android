@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Gamagochi</string>
+    <string name="app_name">가마고치</string>
 
     <!-- Kakao KEY설정[AndroidManifest.xml에도 설정]-->
     <!-- Kakao-init에서 사용 -->
