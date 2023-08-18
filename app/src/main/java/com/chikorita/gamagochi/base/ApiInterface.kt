@@ -14,7 +14,6 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiInterface {
@@ -31,7 +30,7 @@ interface ApiInterface {
     suspend fun postLadyBugLocation(@Body request : LadybugLocationRequest) : Response<SuccessMissionResponse>
 
     @GET("/api/ladybug/detail")
-    suspend fun getLadybugDetail(@Query("userId") userId: Int) : Response<LevelRankingResponse>
+    suspend fun getLadybugDetail(@Query("userId") userId: Long) : Response<LevelRankingResponse>
 
     @GET("/api/level/ranking")
     suspend fun getLevelRanking() : Response<LevelRankingResponse>
