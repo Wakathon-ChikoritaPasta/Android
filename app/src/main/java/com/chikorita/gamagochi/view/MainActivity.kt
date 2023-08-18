@@ -97,8 +97,13 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         initClickListener()
 
         viewModel.mission.observe(this,{
+            // Kotlin을 사용하는 경우
+            val message = "미션 완료! 경험치가 올라요"
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
             ApplicationClass.missions = ApplicationClass.missions.map { missionId ->
                 if (it.any { it == missionId }) {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                     0
                 } else {
                     missionId
