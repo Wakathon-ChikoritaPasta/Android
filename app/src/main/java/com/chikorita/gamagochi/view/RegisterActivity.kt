@@ -40,6 +40,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(ActivityRegisterB
         binding.nextBtn.setOnClickListener{
             if (inputIsValid) {
                 val intent = Intent(this, Register2Activity::class.java)
+                intent.putExtra("username", binding.inputEt.text.toString())
                 startActivity(intent)
                 finish()
                 overridePendingTransition(0, 0);
