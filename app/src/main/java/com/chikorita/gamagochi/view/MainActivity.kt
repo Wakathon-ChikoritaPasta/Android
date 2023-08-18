@@ -1,6 +1,7 @@
 package com.chikorita.gamagochi.view
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -77,50 +78,64 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         initSchoolRanker()
         initMajorRanker()
         setRankerBackground()
+        initClickListener()
     }
 
     private fun initClickListener(){
         val bottomDialog = binding.activityMainBottom
 
         val intent = Intent(this, RankingActivity::class.java)
+        val bundle = Bundle()
+
 
         bottomDialog.schoolRankingBtn.setOnClickListener {
-
+            bundle.putString("key","school")
+            intent.putExtra("bundle",bundle)
+            startActivity(intent)
         }
+        bottomDialog.majorRankingBtn.setOnClickListener {
+            bundle.putString("key","major")
+            intent.putExtra("bundle",bundle)
+            startActivity(intent)
+        }
+
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun setRankerBackground(){
         val bottomDialog = binding.activityMainBottom
 
+        with(viewModel) {
+            if (SchoolRankerArray[0].nickName == "로건") {
+                bottomDialog.rankUser0.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+                bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankUser2.root.setBackgroundResource(R.drawable.border_rectangle)
 
-        // 1등일 때
-        if(SchoolRankerArray[0].nickName == "로건"){
-            bottomDialog.rankUser0.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
-        }else{
-            bottomDialog.rankUser0.root.background = null
-            bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
-        }
+            } else if(SchoolRankerArray[2].nickName == "로건") {
+                bottomDialog.rankUser0.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankUser2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+            } else {
+                bottomDialog.rankUser0.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+                bottomDialog.rankUser2.root.setBackgroundResource(R.drawable.border_rectangle)
+            }
 
-        // 꼴등일 때
-        if(SchoolRankerArray[2].nickName == "로건"){
-            bottomDialog.rankUser2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
-        }else{
-            bottomDialog.rankUser2.root.background = null
-            bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
-        }
 
-        if(MajorRankerArray[0].major == "소프트웨어학과"){
-            bottomDialog.rankMajor0.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
-        }else{
-            bottomDialog.rankMajor0.root.background = null
-            bottomDialog.rankMajor1.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
-        }
+            if (MajorRankerArray[0].major == "소프트웨어") {
+                bottomDialog.rankMajor0.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+                bottomDialog.rankMajor1.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.border_rectangle)
 
-        if(MajorRankerArray[2].major == "소프트웨어학과"){
-            bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
-        }else{
-            bottomDialog.rankMajor2.root.background = null
-            bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+            } else if(MajorRankerArray[2].major == "소프트웨어") {
+                bottomDialog.rankMajor0.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankMajor1.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+            } else {
+                bottomDialog.rankMajor0.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankMajor1.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+                bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.border_rectangle)
+            }
         }
 
     }

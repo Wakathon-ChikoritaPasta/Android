@@ -25,19 +25,24 @@
     
     <TextView
         android:id="@+id/rank_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="20sp"
         android:layout_height="wrap_content"
         android:text="@{String.valueOf(rank) + '위'}"
         android:textColor="@color/black"
         android:textSize="9sp"
+        android:layout_marginStart="8sp"
+        android:gravity="end"
         />
     <TextView
         android:id="@+id/id_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:text="@{nickName}"
         android:textColor="@color/black"
         android:textSize="9sp"
+        android:layout_marginStart="12sp"
+        android:gravity="end"
+
         />
     <TextView
         android:id="@+id/symbol_tv"
@@ -46,14 +51,18 @@
         android:text="@{symbol}"
         android:textColor="@color/black"
         android:textSize="9sp"
+        android:gravity="end"
+        android:layout_weight="1"
         />
     <TextView
         android:id="@+id/exp_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:text="@{String.valueOf(exp) + `Ex`}"
         android:textColor="@color/black"
         android:textSize="9sp"
+        android:layout_marginHorizontal="7dp"
+        android:gravity="end"
         />
 
 </LinearLayout>
