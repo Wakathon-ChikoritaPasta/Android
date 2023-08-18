@@ -129,7 +129,7 @@ class MainViewModel : ViewModel(){
             Log.d("Location_error", response.toString())
             if (response.isSuccessful && response.body() != null) {
                 viewModelScope.launch(Dispatchers.Main) {
-                    //_mission.value = (response.body()나?.result as List<Long>)
+                    _mission.value = (response.body()나?.result as List<Long>)
                     Log.d("뭘까냐4", _mission.value.toString())
 
                 }
