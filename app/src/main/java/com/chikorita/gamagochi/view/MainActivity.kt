@@ -25,7 +25,6 @@ import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
 import com.chikorita.gamagochi.data.MissionMapData
 import com.chikorita.gamagochi.base.BaseBindingActivity
-import com.chikorita.gamagochi.data.MapData
 import com.chikorita.gamagochi.databinding.ActivityMainBinding
 import com.chikorita.gamagochi.model.MajorRanker
 import com.chikorita.gamagochi.model.SchoolRanker
@@ -35,7 +34,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
-
 
 //MainActivity.kt
 class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_main){

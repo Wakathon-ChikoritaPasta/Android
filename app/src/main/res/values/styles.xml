@@ -30,6 +30,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/white</item>
+    </style>
 
     <style name="ProgressBarNoPaddingGray" parent="Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:padding">0dp</item>
