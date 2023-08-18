@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.app.Activity
+import android.bluetooth.BluetoothClass.Device.Major
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,6 +21,8 @@ import android.view.View
 import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
 import com.chikorita.gamagochi.databinding.ActivityMainBinding
+import com.chikorita.gamagochi.model.MajorRanker
+import com.chikorita.gamagochi.model.SchoolRanker
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -38,6 +41,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private lateinit var behavior : BottomSheetBehavior<ConstraintLayout>
 
+    lateinit var SchoolRankerArray : ArrayList<SchoolRanker>
+    lateinit var MajorRankerArray : ArrayList<MajorRanker>
+
+    val bottomDialog = binding.activityMainBottom
+
 
     override fun initView() {
 
@@ -46,7 +54,69 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         setCurrentLocation()
         addCustomMarker()
         setBottomSheet()
+        initSchoolRanker()
+        initMajorRanker()
+        setRankerBackground()
     }
+
+    private fun initClickListener(){
+        val intent = Intent(this,RankingActivity::class.java)
+
+        bottomDialog.schoolRankingBtn.setOnClickListener {
+
+        }
+    }
+
+    private fun setRankerBackground(){
+
+
+        // 1등일 때
+        if(SchoolRankerArray[0].nickName == "로건"){
+            bottomDialog.rankUser0.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+        }else{
+            bottomDialog.rankUser0.root.background = null
+            bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+        }
+
+        // 꼴등일 때
+        if(SchoolRankerArray[2].nickName == "로건"){
+            bottomDialog.rankUser2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+        }else{
+            bottomDialog.rankUser2.root.background = null
+            bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+        }
+
+        if(MajorRankerArray[0].major == "소프트웨어학과"){
+            bottomDialog.rankMajor0.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+        }else{
+            bottomDialog.rankMajor0.root.background = null
+            bottomDialog.rankMajor1.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+        }
+
+        if(MajorRankerArray[2].major == "소프트웨어학과"){
+            bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+        }else{
+            bottomDialog.rankMajor2.root.background = null
+            bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+        }
+
+    }
+
+    private fun initSchoolRanker() {
+        SchoolRankerArray = arrayListOf(
+            SchoolRanker(16, "로건", "무당신", 3400),
+            SchoolRanker(17, "마라", "무당짱", 2300),
+            SchoolRanker(18, "코코아", "무당이", 1700)
+        )
+    }
+    private fun initMajorRanker() {
+        MajorRankerArray = arrayListOf(
+            MajorRanker(1, "소프트웨어학과", 450000),
+            MajorRanker(2, "인공지능학과", 390000),
+            MajorRanker(3, "컴퓨터공학과", 380000)
+        )
+    }
+
 
     override fun onStart() {
         super.onStart()
