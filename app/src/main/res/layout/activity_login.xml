@@ -5,25 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.LoginActivity">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:id="@+id/logo_frame"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toTopOf="@id/btn_start_kakao_login"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_start_kakao_login"
+        >
+    <ImageView
+        android:id="@+id/title_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/title_logo"
+        android:layout_gravity="center"
         />
+    <ImageView
+        android:id="@+id/mudang_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mudang"
+        android:layout_gravity="center"
+        android:layout_marginTop="83dp"
+        />
+    </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_start_kakao_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/kakao_login_medium_narrow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/logo_frame" />
 
     <Button
         android:id="@+id/btn_start_kakao_logout"
