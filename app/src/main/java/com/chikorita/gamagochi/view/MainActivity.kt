@@ -1,28 +1,21 @@
 package com.chikorita.gamagochi.view
 
 import android.Manifest
-import android.app.AlertDialog
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
-import android.os.Build
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.app.Activity
-import android.bluetooth.BluetoothClass.Device.Major
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import com.chikorita.gamagochi.R
-import com.chikorita.gamagochi.base.BaseActivity
 import com.chikorita.gamagochi.data.MissionMapData
 import com.chikorita.gamagochi.base.BaseBindingActivity
 import com.chikorita.gamagochi.databinding.ActivityMainBinding
@@ -222,14 +215,14 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
 
     private fun addDummyMapData() {
         missionMapData.apply {
-            add(MissionMapData("제2학생생활관", 37.4563, 127.13457))
-            add(MissionMapData("법과대학", 37.44925, 127.1275))
-            add(MissionMapData("AI 공학관", 37.45515, 127.1336))
-            add(MissionMapData("가천관", 37.45035, 127.1298))
-            add(MissionMapData("전기차 충전소", 37.452, 127.1305))
-            add(MissionMapData("교육대학원", 37.4519, 127.1318))
-            add(MissionMapData("AI 공학관", 37.45515, 127.1336))
-            add(MissionMapData("글로벌센터", 37.4518, 127.1272))
+            add(MissionMapData(1, "제2학생생활관", 37.4563, 127.13457))
+            add(MissionMapData(2, "법과대학", 37.44925, 127.1275))
+            add(MissionMapData(3, "AI 공학관", 37.45515, 127.1336))
+            add(MissionMapData(4, "가천관", 37.45035, 127.1298))
+            add(MissionMapData(5, "전기차 충전소", 37.452, 127.1305))
+            add(MissionMapData(6, "교육대학원", 37.4519, 127.1318))
+            add(MissionMapData(7, "AI 공학관", 37.45515, 127.1336))
+            add(MissionMapData(8, "글로벌센터", 37.4518, 127.1272))
         }
 //        missionMapData.apply {
 //            add(MissionMapData("정상에 서본 자", 37.4502726, 127.1297295))
@@ -242,7 +235,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_
         for (data in missionMapData) {
             val marker = MapPOIItem()
             marker.apply {
-                itemName = data.name
+                itemName = data.missionName
                 mapPoint = MapPoint.mapPointWithGeoCoord(data.latitude, data.longitude)
 //                markerType = MapPOIItem.MarkerType.BluePin
                 selectedMarkerType = MapPOIItem.MarkerType.RedPin
