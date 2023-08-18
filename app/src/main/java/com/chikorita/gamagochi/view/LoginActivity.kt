@@ -34,9 +34,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         val keyHash = Utility.getKeyHash(this)
         TextMsg(this, "HashKey: ${keyHash}")
 
-        /** KakoSDK init */
-        KakaoSdk.init(this, this.getString(R.string.kakao_app_key))
-
 
         initListener()
 
