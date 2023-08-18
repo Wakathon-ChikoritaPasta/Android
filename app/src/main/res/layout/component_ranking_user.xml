@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="rank"
+            type="int" />
+        <variable
+            name="nickName"
+            type="String" />
+        <variable
+            name="symbol"
+            type="String" />
+        <variable
+            name="exp"
+            type="long" />
+
+    </data>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    >
+    
+    <TextView
+        android:id="@+id/rank_tv"
+        android:layout_width="20sp"
+        android:layout_height="wrap_content"
+        android:text="@{String.valueOf(rank) + '위'}"
+        android:textColor="@color/black"
+        android:textSize="9sp"
+        android:layout_marginStart="8sp"
+        android:gravity="end"
+        />
+    <TextView
+        android:id="@+id/id_tv"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="@{nickName}"
+        android:textColor="@color/black"
+        android:textSize="9sp"
+        android:layout_marginStart="12sp"
+        android:gravity="end"
+
+        />
+    <TextView
+        android:id="@+id/symbol_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{symbol}"
+        android:textColor="@color/black"
+        android:textSize="9sp"
+        android:gravity="end"
+        android:layout_weight="1"
+        />
+    <TextView
+        android:id="@+id/exp_tv"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="@{String.valueOf(exp) + `Ex`}"
+        android:textColor="@color/black"
+        android:textSize="9sp"
+        android:layout_marginHorizontal="7dp"
+        android:gravity="end"
+        />
+
+</LinearLayout>
+
+</layout>

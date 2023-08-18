@@ -2,6 +2,7 @@ package com.chikorita.gamagochi.view
 
 import android.Manifest
 import android.app.AlertDialog
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -13,10 +14,23 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import android.app.Activity
+import android.bluetooth.BluetoothClass.Device.Major
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import androidx.activity.viewModels
 import com.chikorita.gamagochi.R
 import com.chikorita.gamagochi.base.BaseActivity
 import com.chikorita.gamagochi.data.MissionMapData
+import com.chikorita.gamagochi.base.BaseBindingActivity
+import com.chikorita.gamagochi.data.MapData
 import com.chikorita.gamagochi.databinding.ActivityMainBinding
+import com.chikorita.gamagochi.model.MajorRanker
+import com.chikorita.gamagochi.model.SchoolRanker
+import com.chikorita.gamagochi.view.ranking.RankingActivity
+import com.chikorita.gamagochi.viewModel.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -24,7 +38,8 @@ import net.daum.mf.map.api.MapView
 
 
 //MainActivity.kt
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
+class MainActivity : BaseBindingActivity<ActivityMainBinding>(R.layout.activity_main){
+    private val viewModel: MainViewModel by viewModels()
 
     lateinit var mapView: MapView
     private lateinit var mapViewContainer : ViewGroup
@@ -37,8 +52,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private lateinit var behavior : BottomSheetBehavior<ConstraintLayout>
 
+    lateinit var SchoolRankerArray : ArrayList<SchoolRanker>
+    lateinit var MajorRankerArray : ArrayList<MajorRanker>
+
 
     override fun initView() {
+        //binding.setVariable(BR.viewModel,viewModel)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
         // 위치 권한 허용
         getLocationPermission()
@@ -51,9 +72,90 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         addCustomMarker()
         // 하단 바텀 시트 표시
         setBottomSheet()
+
         // 위치 더미 데이터
         addDummyMapData()
+
+        initSchoolRanker()
+        initMajorRanker()
+        setRankerBackground()
+        initClickListener()
     }
+
+    private fun initClickListener(){
+        val bottomDialog = binding.activityMainBottom
+
+        val intent = Intent(this, RankingActivity::class.java)
+        val bundle = Bundle()
+
+
+        bottomDialog.schoolRankingBtn.setOnClickListener {
+            bundle.putString("key","school")
+            intent.putExtra("bundle",bundle)
+            startActivity(intent)
+        }
+        bottomDialog.majorRankingBtn.setOnClickListener {
+            bundle.putString("key","major")
+            intent.putExtra("bundle",bundle)
+            startActivity(intent)
+        }
+
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private fun setRankerBackground(){
+        val bottomDialog = binding.activityMainBottom
+
+        with(viewModel) {
+            if (SchoolRankerArray[0].nickName == "로건") {
+                bottomDialog.rankUser0.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+                bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankUser2.root.setBackgroundResource(R.drawable.border_rectangle)
+
+            } else if(SchoolRankerArray[2].nickName == "로건") {
+                bottomDialog.rankUser0.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankUser2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+            } else {
+                bottomDialog.rankUser0.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankUser1.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+                bottomDialog.rankUser2.root.setBackgroundResource(R.drawable.border_rectangle)
+            }
+
+
+            if (MajorRankerArray[0].major == "소프트웨어") {
+                bottomDialog.rankMajor0.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+                bottomDialog.rankMajor1.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.border_rectangle)
+
+            } else if(MajorRankerArray[2].major == "소프트웨어") {
+                bottomDialog.rankMajor0.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankMajor1.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+            } else {
+                bottomDialog.rankMajor0.root.setBackgroundResource(R.drawable.border_rectangle)
+                bottomDialog.rankMajor1.root.setBackgroundResource(R.drawable.gradation_rectangle_2)
+                bottomDialog.rankMajor2.root.setBackgroundResource(R.drawable.border_rectangle)
+            }
+        }
+
+    }
+
+    private fun initSchoolRanker() {
+        SchoolRankerArray = arrayListOf(
+            SchoolRanker(16, "로건", "무당신", 3400),
+            SchoolRanker(17, "마라", "무당짱", 2300),
+            SchoolRanker(18, "코코아", "무당이", 1700)
+        )
+    }
+    private fun initMajorRanker() {
+        MajorRankerArray = arrayListOf(
+            MajorRanker(1, "소프트웨어학과", 450000),
+            MajorRanker(2, "인공지능학과", 390000),
+            MajorRanker(3, "컴퓨터공학과", 380000)
+        )
+    }
+
 
     override fun onStart() {
         super.onStart()

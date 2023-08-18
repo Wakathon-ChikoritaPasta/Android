@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.chikorita.gamagochi.viewModel.MainViewModel" />
+    </data>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -28,6 +35,8 @@
 
     <include
         android:id="@+id/activity_main_bottom"
-        layout="@layout/dialog_map_bottom"/>
+        layout="@layout/dialog_map_bottom"
+        app:viewModel="@{viewModel}"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
