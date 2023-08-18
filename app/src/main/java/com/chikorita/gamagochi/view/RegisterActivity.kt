@@ -27,11 +27,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(ActivityRegisterB
 
                 binding.countTv.text = count.toString() + "/8"
 
-                if (count > 0 && count < 8 ){
-                    inputIsValid = true
-                }else{
-                    inputIsValid = false
-                }
+                inputIsValid = count in 1..8
 
             }
 
@@ -43,10 +39,9 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(ActivityRegisterB
             if(inputIsValid) {
                 val intent = Intent(this, Register2Activity::class.java)
                 startActivity(intent)
+                finish()
                 overridePendingTransition(0, 0);
-
             }
-
         }
         binding.deleteIv.setOnClickListener{
             binding.inputEt.setText("")

@@ -25,6 +25,7 @@ class Register2Activity : BaseActivity<ActivityRegister2Binding>(ActivityRegiste
             if(inputIsValid) {
                 val intent = Intent(this, OnBoardingActivity::class.java)
                 startActivity(intent)
+                finish()
             }
 
         }
